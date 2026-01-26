@@ -2,15 +2,27 @@
 
 ## Overview
 
-This project explores the integration of existing ActivityWatch MCP (Model Context Protocol) servers with various AI tools and platforms. The goal is to evaluate, configure, and demonstrate how ActivityWatch's time tracking capabilities can be leveraged through MCP to enhance AI assistant functionality.
+This project explores the integration of existing ActivityWatch MCP (Model Context Protocol) servers with various AI tools and platforms. The goal is to evaluate, configure, and demonstrate how ActivityWatch's time tracking capabilities can be leveraged through MCP to enhance AI assistant functionality, **specifically enabling continuous data access** for Claude and other AI tools.
 
 ## Project Goals
 
-- Evaluate existing ActivityWatch MCP server implementations
-- Configure MCP servers for integration with AI tools (Claude, ChatGPT, etc.)
-- Test and document integration patterns
-- Identify potential enhancements or customizations needed
-- Create examples and documentation for using ActivityWatch data with AI assistants
+- ✅ Evaluate existing ActivityWatch MCP server implementations
+- ✅ Analyze current capabilities and limitations
+- 🎯 **Enable continuous data access** (not just on-demand queries)
+- 🎯 Configure MCP servers for integration with Claude via MCP connectors
+- 🎯 Test and document integration patterns
+- 🎯 Identify and implement enhancements needed for continuous data flow
+- 🎯 Create examples and documentation for using ActivityWatch data with AI assistants
+
+## Key Finding
+
+**The existing MCP server provides on-demand query capabilities but does NOT provide continuous data access.** To enable Claude to have persistent awareness of ActivityWatch data, we need to:
+
+1. **Add MCP Resources support** (2-4 days for basic, 5-8 days for production-ready)
+2. **Implement background polling** to keep data fresh
+3. **Create data aggregation** for summaries and insights
+
+See [Findings Summary](./docs/FINDINGS_SUMMARY.md) for details.
 
 ## Existing MCP Server Implementations
 
@@ -44,18 +56,39 @@ The MCP server provides access to:
 ```
 .
 ├── README.md
-├── docs/              # Documentation and research
-├── examples/          # Integration examples
-├── config/            # Configuration files
-└── tests/             # Test scripts and validation
+├── docs/                      # Documentation and research
+│   ├── FINDINGS_SUMMARY.md     # Quick summary of findings
+│   ├── ANALYSIS_CONTINUOUS_DATA_ACCESS.md  # Detailed analysis
+│   ├── IMPLEMENTATION_PLAN.md  # Step-by-step implementation plan
+│   ├── EXISTING_MCP_SERVERS.md # Research on existing servers
+│   └── PROJECT_GOALS.md        # Project roadmap
+├── existing-mcp-server/        # Cloned existing MCP server for analysis
+├── examples/                   # Integration examples
+├── config/                     # Configuration files
+└── tests/                      # Test scripts and validation
 ```
+
+## Documentation
+
+- **[Findings Summary](./docs/FINDINGS_SUMMARY.md)** - Quick answer to "what effort is needed?"
+- **[Detailed Analysis](./docs/ANALYSIS_CONTINUOUS_DATA_ACCESS.md)** - Comprehensive analysis of continuous data access
+- **[Implementation Plan](./docs/IMPLEMENTATION_PLAN.md)** - Step-by-step plan for implementation
+- **[Existing MCP Servers](./docs/EXISTING_MCP_SERVERS.md)** - Research on available implementations
 
 ## Getting Started
 
-1. Ensure ActivityWatch is installed and running
-2. Install the MCP server of choice
-3. Configure the MCP server for your AI tool
-4. Test the integration
+### Current Status
+
+✅ **Analysis Complete** - We've analyzed the existing MCP server and identified what's needed for continuous data access.
+
+🎯 **Next Steps** - Implementation of MCP Resources support for continuous data access.
+
+### For Development
+
+1. Ensure ActivityWatch is installed and running locally
+2. Review the [Implementation Plan](./docs/IMPLEMENTATION_PLAN.md)
+3. Set up development environment with the existing MCP server
+4. Begin implementing MCP Resources support
 
 ## Resources
 
