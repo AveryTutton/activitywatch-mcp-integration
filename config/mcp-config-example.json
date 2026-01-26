@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "activitywatch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@activitywatch/mcp-server"
+      ],
+      "env": {
+        "ACTIVITYWATCH_URL": "http://localhost:5600"
+      }
+    }
+  }
+}
