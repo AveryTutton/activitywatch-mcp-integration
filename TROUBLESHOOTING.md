@@ -1,5 +1,79 @@
 # Troubleshooting: ActivityWatch MCP Connection
 
+## Issue: Connector Shows "LOCAL DEV" but "Tool permissions" Is Empty
+
+### Symptom
+In Claude Desktop, the ActivityWatch connector appears under Connectors with a "Configure" button. When you click Configure, you see "Tool permissions" and the description "Choose when Claude is allowed to use these tools," but **no toggles or tools are listed**.
+
+### Cause
+This usually means the MCP server **failed to start**. Claude Desktop loads the connector from config but cannot run the server or discover its tools. Common causes:
+
+1. **MCP server not built** – The `dist/index.js` file does not exist (you cloned the repo but never ran `npm run build`).
+2. **Wrong path in config** – The path in `claude_desktop_config.json` does not point to the built `dist/index.js`.
+3. **Node.js not found** – Claude Desktop cannot run `node` (e.g. PATH differs when launched from the GUI).
+
+### Solution
+
+#### Step 1: Build the MCP server (required after clone)
+
+From the project root:
+
+```bash
+cd /Users/avery.tutton/Code/activitywatch-mcp-integration/existing-mcp-server
+npm install
+npm run build
+```
+
+Verify the build:
+
+```bash
+ls -la /Users/avery.tutton/Code/activitywatch-mcp-integration/existing-mcp-server/dist/index.js
+```
+
+You should see the file. If not, the connector will never show tools.
+
+#### Step 2: Check Claude Desktop config
+
+Config file (macOS):
+
+```bash
+cat ~/Library/Application\ Support/Claude/claude_desktop_config.json
+```
+
+It should contain something like:
+
+```json
+{
+  "mcpServers": {
+    "activitywatch": {
+      "command": "node",
+      "args": ["/Users/avery.tutton/Code/activitywatch-mcp-integration/existing-mcp-server/dist/index.js"]
+    }
+  }
+}
+```
+
+The path in `args` must be the **full path** to `dist/index.js` and the file must exist.
+
+#### Step 3: Restart Claude Desktop fully
+
+1. Quit Claude Desktop completely (⌘Q).
+2. Reopen Claude Desktop.
+3. Open Configure for the ActivityWatch connector again – you should now see the five tools listed under Tool permissions (e.g. `activitywatch_list_buckets`, `activitywatch_run_query`, etc.).
+
+#### Step 4: If tools still don’t appear
+
+- Ensure **ActivityWatch is running** (see “ActivityWatch Not Running” below). Some MCP servers delay or fail tool discovery if the backend is unreachable.
+- Check **Claude Desktop logs** (or system logs) for errors when starting the MCP server.
+- From Terminal, confirm Node can run the server:
+
+  ```bash
+  node /Users/avery.tutton/Code/activitywatch-mcp-integration/existing-mcp-server/dist/index.js
+  ```
+  It should run and wait on stdin (no immediate error). Press Ctrl+C to stop.
+
+---
+
 ## Issue: ActivityWatch Not Running
 
 ### Symptom
@@ -121,6 +195,8 @@ To ensure ActivityWatch starts automatically when you log in:
 This way, ActivityWatch will always be running when you need it.
 
 ## Quick Health Check
+
+If the connector shows but has **no tools** (empty Tool permissions), run the build step first – see the “Connector shows LOCAL DEV but Tool permissions is empty” section above.
 
 Run this command to check everything:
 ```bash

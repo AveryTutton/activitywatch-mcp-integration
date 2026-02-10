@@ -25,6 +25,18 @@ The MCP server has been added to your Claude Desktop configuration at:
 
 ## Next Steps
 
+### 0. Build the MCP server (required first time / after clone)
+
+If you just cloned the repo, the MCP server must be built before Claude Desktop can use it:
+
+```bash
+cd /Users/avery.tutton/Code/activitywatch-mcp-integration/existing-mcp-server
+npm install
+npm run build
+```
+
+If `dist/index.js` doesn’t exist, the connector will show in Claude but **Tool permissions will be empty**. See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for that case.
+
 ### 1. Restart Claude Desktop
 
 **Important:** You must restart Claude Desktop for the MCP server configuration to take effect.
